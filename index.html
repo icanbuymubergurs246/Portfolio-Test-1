@@ -1,1 +1,416 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Worramate Kh | Creative & Digital Content Writer</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+    
+    <style>
+        /* Custom Properties */
+        :root {
+            --bg-color: #0a0a0b;
+            --text-color: #f4f4f5;
+            --accent-color: #8a8a8e;
+            --cursor-bg: #ffffff;
+            --cursor-outline: rgba(255, 255, 255, 0.5);
+            --cursor-hover: rgba(255, 255, 255, 0.1);
+            --border-color: #262626;
+            --marquee-text: #262626;
+            --text-muted: #9ca3af;
+            --text-darker: #52525b;
+            --gradient-center: rgba(38, 38, 38, 0.2);
+        }
 
+        body.light-theme {
+            --bg-color: #f4f4f5;
+            --text-color: #09090b;
+            --cursor-bg: #000000;
+            --cursor-outline: rgba(0, 0, 0, 0.5);
+            --cursor-hover: rgba(0, 0, 0, 0.1);
+            --border-color: #d4d4d8;
+            --marquee-text: #e4e4e7;
+            --text-muted: #52525b;
+            --text-darker: #a1a1aa;
+            --gradient-center: rgba(228, 228, 231, 0.6);
+        }
+
+        /* Base Styles */
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            cursor: none; /* Hide default cursor for custom one */
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        h1, h2, h3, h4, .font-syne {
+            font-family: 'Syne', sans-serif;
+        }
+
+        /* Premium Noise Overlay */
+        .noise-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100vw; height: 100vh;
+            pointer-events: none;
+            z-index: 999;
+            opacity: 0.04;
+            background: url('data:image/svg+xml;utf8,%3Csvg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg"%3E%3Cfilter id="noiseFilter"%3E%3CfeTurbulence type="fractalNoise" baseFrequency="0.8" numOctaves="3" stitchTiles="stitch"/%3E%3C/filter%3E%3Crect width="100%25" height="100%25" filter="url(%23noiseFilter)"/%3E%3C/svg%3E');
+        }
+
+        /* Custom Cursor */
+        .cursor-dot, .cursor-outline {
+            position: fixed;
+            top: 0; left: 0;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            z-index: 1000;
+            pointer-events: none;
+        }
+        .cursor-dot {
+            width: 8px; height: 8px;
+            background-color: var(--cursor-bg);
+            transition: background-color 0.2s;
+        }
+        .cursor-outline {
+            width: 40px; height: 40px;
+            border: 1px solid var(--cursor-outline);
+            transition: width 0.2s, height 0.2s, background-color 0.2s, border-color 0.2s;
+        }
+        
+        /* Cursor Hover State */
+        body.hovering .cursor-outline {
+            width: 60px; height: 60px;
+            background-color: var(--cursor-hover);
+            border-color: transparent;
+        }
+
+        /* Typography "Wow" Effects */
+        .text-stroke {
+            -webkit-text-stroke: 1.5px var(--text-color);
+            color: transparent;
+            transition: all 0.4s ease;
+        }
+        .text-stroke:hover {
+            -webkit-text-stroke: 1.5px transparent;
+            color: #ffffff;
+        }
+        
+        .hero-text-hover:hover {
+            -webkit-text-stroke: 2px var(--text-color);
+            color: transparent;
+        }
+
+        /* Marquee Animation */
+        .marquee-container {
+            display: flex;
+            white-space: nowrap;
+            overflow: hidden;
+        }
+        .marquee-content {
+            animation: marquee 25s linear infinite;
+        }
+        @keyframes marquee {
+            0% { transform: translateX(0%); }
+            100% { transform: translateX(-50%); }
+        }
+
+        /* Scroll Reveal Animations */
+        .reveal {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 1s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        .reveal.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Portfolio Category Hover specific */
+        .cat-item span.cat-title {
+            transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+            display: inline-block;
+        }
+        .cat-item:hover span.cat-title {
+            transform: translateX(30px);
+            color: #fff;
+        }
+        .cat-item:hover span.cat-num {
+            opacity: 1;
+            transform: translateX(-20px);
+        }
+
+        /* Hide scrollbar for clean look */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-color); }
+        ::-webkit-scrollbar-thumb { background: #333; border-radius: 4px; }
+        ::-webkit-scrollbar-thumb:hover { background: #555; }
+    </style>
+</head>
+<body class="antialiased selection:bg-white selection:text-black">
+
+    <!-- Noise Texture & Custom Cursor -->
+    <div class="noise-overlay"></div>
+    <div class="cursor-dot" id="cursor-dot"></div>
+    <div class="cursor-outline" id="cursor-outline"></div>
+
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full z-50 px-6 py-8 mix-blend-difference">
+        <div class="flex justify-between items-center max-w-7xl mx-auto text-white">
+            <div class="font-syne font-bold text-xl tracking-tighter interactive">WK.</div>
+            <div class="flex items-center gap-6">
+                <button id="theme-toggle" class="font-inter text-sm uppercase tracking-widest hover:text-gray-400 transition-colors interactive flex items-center gap-2">
+                    Theme ☼
+                </button>
+                <a href="#contact" class="font-inter text-sm uppercase tracking-widest hover:text-gray-400 transition-colors interactive">Let's Talk</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <header class="relative h-screen flex flex-col items-center justify-center overflow-hidden">
+        <div class="absolute inset-0 -z-10" style="background: radial-gradient(ellipse at center, var(--gradient-center), var(--bg-color), var(--bg-color));"></div>
+        
+        <div class="text-center z-10 px-4 reveal active">
+            <p class="font-inter uppercase tracking-[0.4em] text-[var(--text-muted)] text-xs md:text-sm mb-6">Creative / Digital Content Writer</p>
+            
+            <h1 class="font-syne font-extrabold uppercase leading-[0.85] text-[12vw] md:text-[10vw] interactive hero-text-hover transition-colors duration-500">
+                Worramate
+            </h1>
+            <h1 class="font-syne font-extrabold uppercase leading-[0.85] text-[12vw] md:text-[10vw] interactive hero-text-hover transition-colors duration-500">
+                Kh
+            </h1>
+        </div>
+
+        <!-- Scroll Indicator -->
+        <div class="absolute bottom-10 left-1/2 transform -translate-x-1/2 flex flex-col items-center opacity-50 animate-bounce">
+            <span class="font-inter text-[10px] uppercase tracking-widest mb-2">Scroll</span>
+            <div class="w-[1px] h-12 bg-white"></div>
+        </div>
+    </header>
+
+    <!-- Infinite Marquee -->
+    <div class="py-10 border-y border-[var(--border-color)] bg-[var(--bg-color)] z-20 relative overflow-hidden">
+        <div class="marquee-container">
+            <div class="marquee-content flex text-3xl md:text-5xl font-syne font-bold uppercase text-[var(--marquee-text)] whitespace-nowrap">
+                <span>EDITORIAL WRITING • BRAND STORYTELLING • DIGITAL CAMPAIGNS • COPYWRITING • SEO CONTENT • </span>
+                <span>EDITORIAL WRITING • BRAND STORYTELLING • DIGITAL CAMPAIGNS • COPYWRITING • SEO CONTENT • </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- About Intro -->
+    <section class="py-32 px-6 max-w-5xl mx-auto text-center reveal">
+        <h2 class="font-syne text-3xl md:text-5xl lg:text-6xl leading-tight font-medium text-[var(--text-color)]">
+            I craft compelling narratives that elevate brands, engage audiences, and breathe life into digital spaces. 
+            <span class="text-[var(--text-darker)]">Specializing in high-end lifestyle domains.</span>
+        </h2>
+    </section>
+
+    <!-- Interactive Categories Portfolio Section (The Wow Factor) -->
+    <section id="work" class="relative min-h-screen py-32 overflow-hidden flex items-center group">
+        
+        <!-- Dynamic Backgrounds -->
+        <div class="absolute inset-0 z-0">
+            <!-- Default Dark -->
+            <div class="absolute inset-0 bg-[var(--bg-color)] transition-opacity duration-700 z-10" id="bg-default"></div>
+            
+            <!-- Fashion -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700 z-20 portfolio-bg" id="bg-fashion" style="background-image: url('https://images.unsplash.com/photo-1490481651871-ab68de25d43d?q=80&w=2070&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/60"></div>
+            </div>
+            
+            <!-- Beauty -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700 z-20 portfolio-bg" id="bg-beauty" style="background-image: url('https://images.unsplash.com/photo-1596462502278-27bfdc403348?q=80&w=2000&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/60"></div>
+            </div>
+            
+            <!-- Travel -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700 z-20 portfolio-bg" id="bg-travel" style="background-image: url('https://images.unsplash.com/photo-1476514525535-07fb3b4ae5f1?q=80&w=2070&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/60"></div>
+            </div>
+            
+            <!-- Lifestyle -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700 z-20 portfolio-bg" id="bg-lifestyle" style="background-image: url('https://images.unsplash.com/photo-1511988617509-a5708f14c2c5?q=80&w=2070&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/60"></div>
+            </div>
+            
+            <!-- Watches & Jewelry -->
+            <div class="absolute inset-0 bg-cover bg-center opacity-0 transition-opacity duration-700 z-20 portfolio-bg" id="bg-jewelry" style="background-image: url('https://images.unsplash.com/photo-1585123334904-845d60e97b29?q=80&w=2070&auto=format&fit=crop');">
+                <div class="absolute inset-0 bg-black/60"></div>
+            </div>
+        </div>
+
+        <div class="container mx-auto px-6 relative z-30">
+            <p class="font-inter uppercase tracking-[0.3em] text-[var(--text-muted)] text-sm mb-12 reveal">Domains of Expertise</p>
+            
+            <ul class="flex flex-col w-full text-5xl md:text-7xl lg:text-8xl font-syne font-bold uppercase reveal">
+                <!-- Item 1 -->
+                <li class="border-t border-[var(--border-color)] py-8 interactive cat-item group" data-target="bg-fashion">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-stroke cat-title">Fashion</span>
+                        <span class="text-lg md:text-2xl font-inter font-light text-white opacity-0 cat-num transition-all duration-300">01</span>
+                    </div>
+                </li>
+                <!-- Item 2 -->
+                <li class="border-t border-[var(--border-color)] py-8 interactive cat-item group" data-target="bg-beauty">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-stroke cat-title">Beauty</span>
+                        <span class="text-lg md:text-2xl font-inter font-light text-white opacity-0 cat-num transition-all duration-300">02</span>
+                    </div>
+                </li>
+                <!-- Item 3 -->
+                <li class="border-t border-[var(--border-color)] py-8 interactive cat-item group" data-target="bg-travel">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-stroke cat-title">Travel</span>
+                        <span class="text-lg md:text-2xl font-inter font-light text-white opacity-0 cat-num transition-all duration-300">03</span>
+                    </div>
+                </li>
+                <!-- Item 4 -->
+                <li class="border-t border-[var(--border-color)] py-8 interactive cat-item group" data-target="bg-lifestyle">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-stroke cat-title">Lifestyle</span>
+                        <span class="text-lg md:text-2xl font-inter font-light text-white opacity-0 cat-num transition-all duration-300">04</span>
+                    </div>
+                </li>
+                <!-- Item 5 -->
+                <li class="border-y border-[var(--border-color)] py-8 interactive cat-item group" data-target="bg-jewelry">
+                    <div class="flex justify-between items-center w-full">
+                        <span class="text-stroke cat-title text-left">Watches <br class="md:hidden">& Jewelry</span>
+                        <span class="text-lg md:text-2xl font-inter font-light text-white opacity-0 cat-num transition-all duration-300">05</span>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </section>
+
+    <!-- Footer / Contact -->
+    <footer id="contact" class="py-32 px-6 bg-[var(--bg-color)] relative z-20 reveal">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row justify-between items-end">
+            <div class="mb-12 md:mb-0">
+                <h2 class="font-syne text-5xl md:text-7xl font-bold uppercase mb-6">Let's Create<br>Something.</h2>
+                <a href="mailto:hello@worramate.com" class="font-inter text-xl md:text-2xl border-b border-[var(--text-darker)] pb-1 hover:text-[var(--text-muted)] transition-colors interactive">hello@worramate.com</a>
+            </div>
+            
+            <div class="flex gap-8 font-inter uppercase text-sm tracking-widest text-[var(--text-muted)]">
+                <a href="#" class="hover:text-[var(--text-color)] transition-colors interactive">LinkedIn</a>
+                <a href="#" class="hover:text-[var(--text-color)] transition-colors interactive">Instagram</a>
+                <a href="#" class="hover:text-[var(--text-color)] transition-colors interactive">Medium</a>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto mt-24 pt-8 border-t border-[var(--border-color)] flex justify-between font-inter text-xs text-[var(--text-darker)]">
+            <p>&copy; 2026 Worramate Kh. All rights reserved.</p>
+            <p>Designed for Impact</p>
+        </div>
+    </footer>
+
+    <!-- Scripts -->
+    <script>
+        // Custom Cursor Logic
+        const cursorDot = document.getElementById('cursor-dot');
+        const cursorOutline = document.getElementById('cursor-outline');
+        const interactives = document.querySelectorAll('.interactive');
+
+        window.addEventListener('mousemove', (e) => {
+            const posX = e.clientX;
+            const posY = e.clientY;
+
+            // Dot follows exactly
+            cursorDot.style.left = `${posX}px`;
+            cursorDot.style.top = `${posY}px`;
+
+            // Outline follows with slight delay
+            cursorOutline.animate({
+                left: `${posX}px`,
+                top: `${posY}px`
+            }, { duration: 500, fill: "forwards" });
+        });
+
+        // Add hover effect state to body for cursor scaling
+        interactives.forEach(el => {
+            el.addEventListener('mouseenter', () => document.body.classList.add('hovering'));
+            el.addEventListener('mouseleave', () => document.body.classList.remove('hovering'));
+        });
+
+        // Portfolio Background Reveal Logic
+        const catItems = document.querySelectorAll('.cat-item');
+        const portfolioBgs = document.querySelectorAll('.portfolio-bg');
+        const defaultBg = document.getElementById('bg-default');
+
+        catItems.forEach(item => {
+            item.addEventListener('mouseenter', () => {
+                const targetId = item.getAttribute('data-target');
+                
+                // Hide all backgrounds
+                portfolioBgs.forEach(bg => {
+                    bg.style.opacity = '0';
+                    bg.style.zIndex = '20';
+                });
+                
+                // Show target background
+                const targetBg = document.getElementById(targetId);
+                if (targetBg) {
+                    targetBg.style.opacity = '1';
+                    targetBg.style.zIndex = '25';
+                }
+                
+                // Dim default
+                defaultBg.style.opacity = '0';
+            });
+
+            item.addEventListener('mouseleave', () => {
+                // Return to default dark state
+                portfolioBgs.forEach(bg => {
+                    bg.style.opacity = '0';
+                    bg.style.zIndex = '20';
+                });
+                defaultBg.style.opacity = '1';
+            });
+        });
+
+        // Scroll Reveal Observer
+        const revealElements = document.querySelectorAll('.reveal');
+        
+        const revealCallback = (entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    observer.unobserve(entry.target); // Run once
+                }
+            });
+        };
+
+        const revealOptions = {
+            threshold: 0.15,
+            rootMargin: "0px 0px -50px 0px"
+        };
+
+        const revealObserver = new IntersectionObserver(revealCallback, revealOptions);
+
+        revealElements.forEach(el => {
+            revealObserver.observe(el);
+        });
+
+        // Theme Toggle Logic
+        const themeBtn = document.getElementById('theme-toggle');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('light-theme');
+            if(document.body.classList.contains('light-theme')) {
+                themeBtn.innerHTML = 'Theme ☾';
+            } else {
+                themeBtn.innerHTML = 'Theme ☼';
+            }
+        });
+
+    </script>
+</body>
+</html>
